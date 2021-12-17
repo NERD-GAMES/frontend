@@ -9,8 +9,8 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { IUser } from '../App';
 import { Link } from 'react-router-dom';
+import { IUser } from '../types';
 
 const settings = ['Sair'];
 

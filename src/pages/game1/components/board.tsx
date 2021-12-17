@@ -1,18 +1,36 @@
 import { Table, TableCell, TableRow } from '@mui/material';
-import { IBoard, IDeck } from '../../../App';
-import { IPlayer } from './play';
+import { IBoard, IDeckItem } from '../../../types';
+import { IPlayer } from '../GamePlay';
 
 interface Props {
   players: IPlayer[]
-  cardsInBoard: IDeck[]
-  board: IBoard,
+  cardsInBoard: IDeckItem[]
+  size?: string,
   onSelected: (x: number, y: number) => void
 }
 
-function Board({ players, cardsInBoard, board, onSelected }: Props) {
+const getSize = (size?: string) => {
+  switch (size) {
+    case "xs":
+      return { x: 10, y: 10 }
+    case "sm":
+      return { x: 20, y: 20 }
+    case "md":
+      return { x: 30, y: 30 }
+    case "lg":
+      return { x: 50, y: 50 }
+    case "xl":
+      return { x: 80, y: 80 }
+    default:
+      return { x: 120, y: 120 }
+  }
+}
 
-  const heigthList = Array.from(Array(board.y), (_, i) => i + 1)
-  const widthList = Array.from(Array(board.x), (_, i) => i + 1)
+
+function Board({ players, cardsInBoard, size, onSelected }: Props) {
+  const sizes = getSize(size)
+  const heigthList = Array.from(Array(sizes.y), (_, i) => i + 1)
+  const widthList = Array.from(Array(sizes.x), (_, i) => i + 1)
 
   return (
     <Table style={{ backgroundImage: "url(https://images.tcdn.com.br/img/img_prod/607564/mural_de_parede_montanhas_1554_2_20180126155300.jpg)" }}>
@@ -23,7 +41,7 @@ function Board({ players, cardsInBoard, board, onSelected }: Props) {
               let backgroundColor = ""
               const cell = cardsInBoard.find(h => (h.x === x && h.y === y))
               if (cell) {
-                const cellPlayer = players.find(p => p.id === cell.playerId)
+                const cellPlayer = players.find(p => p.id === cell.userId)
                 if (cellPlayer) {
                   backgroundColor = cellPlayer.color
                 }
@@ -44,11 +62,11 @@ function Board({ players, cardsInBoard, board, onSelected }: Props) {
                       display: "flex", alignItems: "center",
                       border: `3px solid ${backgroundColor}`
                     }}>
-                      {cell?.avatar &&
+                      {cell?.photoURL &&
                         <img
                           // draggable={false}
                           style={{ maxWidth: "100%", maxHeight: "100%" }}
-                          src={cell.avatar}
+                          src={cell.photoURL}
                           alt="hero"
                         />
                       }

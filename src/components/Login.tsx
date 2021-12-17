@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Button, Grid, TextField } from '@mui/material';
-import { IUser } from '../App';
 import Api from '../api';
+import { IUser } from '../types';
 
 
 interface Props {
@@ -17,6 +17,13 @@ function Login({ setUser }: Props) {
     }
   }
 
+  const handleGoogleLogin = async () => {
+    const user = await Api.loginWithGooglePopup(setUser)
+    if (user) {
+      await Api.addUser(user)
+    }
+  }
+
   return (
     <Grid container justifyContent="center" alignItems="center" style={{ height: "100vh" }}>
       <Grid item>
@@ -25,6 +32,14 @@ function Login({ setUser }: Props) {
           variant="outlined"
           onClick={handleFacebookLogin} >
           Entrar Com Facebook
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button
+          style={{ width: 300 }}
+          variant="outlined"
+          onClick={handleGoogleLogin} >
+          Entrar Com Google
         </Button>
       </Grid>
     </Grid >
