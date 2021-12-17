@@ -1,5 +1,5 @@
 import { Table, TableCell, TableRow } from '@mui/material';
-import { IBoard, IDeckItem } from '../../../types';
+import { IDeckItem } from '../../../types';
 import { IPlayer } from '../GamePlay';
 
 interface Props {

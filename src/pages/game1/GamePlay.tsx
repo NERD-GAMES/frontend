@@ -22,11 +22,7 @@ const turns = [
 
 const players: IPlayer[] = [
   { id: "yaB5gAe6UFNc3TaJwnWfnBigjKT2", color: "red", nickName: "Everton" },
-  { id: "2", color: "blue", nickName: "Ana" },
-  { id: "3", color: "pink", nickName: "Anderson" },
-  { id: "4", color: "green", nickName: "Aldrei" },
-  { id: "5", color: "yellow", nickName: "Bruno" },
-  { id: "6", color: "gray", nickName: "Ricardo" },
+  { id: "nlw8y6cU4NhbTtrXSMvKokqNpz23", color: "blue", nickName: "Ana" },
 ]
 
 interface Props {
