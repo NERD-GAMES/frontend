@@ -1,4 +1,4 @@
-import { Avatar, Card, CardActionArea, CardContent, CardHeader, CardMedia, Chip, Grid, Rating, Tooltip, Typography } from "@mui/material"
+import { Avatar, Card, CardActionArea, CardContent, CardHeader, Chip, Grid, Tooltip, Typography } from "@mui/material"
 import { IHero, IHeroPart } from "../types"
 import 'animate.css';
 
@@ -32,21 +32,10 @@ const CardHero = ({ onClick, hero }: Props) => {
           <div
             style={{ position: "relative", height: 300, border: "1px solid #CCC" }}>
 
-            {[
-              { field: "partHead", label: "Cabeça" },
-              { field: "partEyes", label: "Olhos" },
-              { field: "partNose", label: "Nariz" },
-              { field: "partMouth", label: "Boca" },
-              { field: "partBreastplate", label: "Peitoral" },
-              { field: "partArmL", label: "Braço esquerdo" },
-              { field: "partArmR", label: "Braco direito" },
-              { field: "partLegL", label: "Perna esquerda" },
-              { field: "partLegR", label: "Perna direita" },
-            ].map((componentHero) => {
-              const partField = hero[componentHero.field as keyof IHero] as IHeroPart
+            {hero?.parts?.map((partHero) => {
               let style = {}
               try {
-                style = JSON.parse(partField?.style || "")
+                style = JSON.parse(partHero?.style || "")
               } catch (error) {
 
               }
@@ -54,8 +43,8 @@ const CardHero = ({ onClick, hero }: Props) => {
               return (
                 <img
                   alt=""
-                  src={partField?.photosURL && partField?.photosURL[0]}
-                  className={partField?.className}
+                  src={partHero?.photosURL && partHero?.photosURL[0]}
+                  className={partHero?.className}
                   style={{ ...style, position: "absolute", fill: "yellow" }}
                 />
               )

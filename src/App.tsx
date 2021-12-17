@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Login from './components/Login';
 import ResponsiveAppBar from './components/ResponsiveAppBar';
 import Router from './pages/router';
-import { IHero, IUser } from './types';
+import { IUser } from './types';
 
 function App() {
   const [currentUser, setCurrentUser] = useState<IUser>()

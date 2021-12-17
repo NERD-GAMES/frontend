@@ -11,11 +11,12 @@ export interface IRoom {
 
 
 export interface IHeroPart {
-  photosURL?: [string]
+  photosURL?: string[]
   style?: string
   className?: string
+  type?: string
+  interval?: number
 }
-
 
 export interface IHero {
   id?: string
@@ -26,15 +27,7 @@ export interface IHero {
   description?: string
   userId?: string
   tipo?: string
-  partHead?: IHeroPart // cabeça
-  partEyes?: IHeroPart // olhos
-  partNose?: IHeroPart // nariz
-  partMouth?: IHeroPart // boca
-  partBreastplate?: IHeroPart // peitoral
-  partArmL?: IHeroPart // braço esquerdo
-  partArmR?: IHeroPart // braco direito
-  partLegL?: IHeroPart // perna esquerda
-  partLegR?: IHeroPart // perna direita
+  parts?: IHeroPart[]
 }
 
 export interface IDeckItem extends IHero {

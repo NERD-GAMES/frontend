@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useMatch, useNavigate } from 'react-router-dom';
-import { Avatar, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Chip, Grid, Icon, IconButton, Rating, Table, TableCell, TableRow, TextField, Typography } from '@mui/material';
+import { useLocation } from 'react-router-dom';
+import { Button, Grid, Typography } from '@mui/material';
 import Board from './components/board';
 import CardHero from './../../components/CardHero';
-import { IBoard, IDeckItem, IUser, IHero, IRoom } from './../../types';
+import { IDeckItem, IUser, IHero, IRoom } from './../../types';
 import api from './../../api';
 
 export interface IPlayer {
@@ -33,7 +33,6 @@ function Game1Play({ currentUser }: Props) {
   const loc = useLocation()
   const [turn, setTurn] = useState({ playerId: players[0].id, fase: 0 })
   const [room, setRoom] = useState<IRoom>()
-  debugger
   const [heroes, setHeroes] = useState<IDeckItem[]>([])
   const [heroSelected, setHeroSelected] = useState<IDeckItem>()
 
@@ -149,7 +148,7 @@ function Game1Play({ currentUser }: Props) {
                   }}
                   disabled={cardsInDeck.length === 0}
                   onClick={() => setHeroes(heroes.map(_a => {
-                    if (_a.id == cardsInDeck[0].id) {
+                    if (_a.id === cardsInDeck[0].id) {
                       return { ..._a, status: 1 }
                     }
                     return _a

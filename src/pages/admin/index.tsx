@@ -1,6 +1,5 @@
-import { Button, Card, CardContent, CardMedia, Container, Grid, Icon, IconButton, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Container, Grid, Icon, IconButton } from "@mui/material";
 import api from "../../api";
 import CardHero from "../../components/CardHero";
 import Title from "../../components/Title";
@@ -9,10 +8,6 @@ import AddOrEditHeroModal from "./addOrEditHeroModal";
 
 interface Props {
   currentUser: IUser
-}
-
-const INITIAL_HERO: IHero = {
-  name: ""
 }
 
 interface IModal {

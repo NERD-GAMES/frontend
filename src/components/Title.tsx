@@ -9,7 +9,7 @@ const Title = ({ title, right }: Props) => {
   return (
     <Grid container justifyContent="space-between">
       <Grid item>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="subtitle1" color="text.secondary">
           {title}
         </Typography>
       </Grid>
