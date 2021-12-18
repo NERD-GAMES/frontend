@@ -11,17 +11,22 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 import { IUser } from '../types';
+import { Fab } from '@mui/material';
+import PaidIcon from '@mui/icons-material/Paid';
+import { connect } from 'react-redux';
+import { RootState } from '../store';
+import { bindActionCreators } from 'redux';
+import { Creators as userActions } from "./../store/ducks/currentUser";
 
 const settings = ['Sair'];
 
 interface Props {
-  currentUser: IUser
+  currentUser?: IUser,
+  setLogoffAction: () => void
 }
 
-const ResponsiveAppBar = ({ currentUser }: Props) => {
+const ResponsiveAppBar = ({ currentUser, setLogoffAction }: Props) => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-
-
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -36,11 +41,15 @@ const ResponsiveAppBar = ({ currentUser }: Props) => {
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title={currentUser.name || ""}>
+            <Fab variant="extended" size="small" style={{ marginRight: 8 }} >
+              <PaidIcon style={{ marginRight: 8 }} />
+              {currentUser?.gems || 0}
+            </Fab>
+            <Tooltip title={currentUser?.name || ""}>
               <IconButton onClick={(e) => setAnchorElUser(e.currentTarget)} sx={{ p: 0 }}>
                 <Avatar
-                  alt={currentUser.name || ""}
-                  src={currentUser.photoURL || ""}
+                  alt={currentUser?.name || ""}
+                  src={currentUser?.photoURL || ""}
                 />
               </IconButton>
             </Tooltip>
@@ -60,11 +69,12 @@ const ResponsiveAppBar = ({ currentUser }: Props) => {
               open={Boolean(anchorElUser)}
               onClose={() => setAnchorElUser(null)}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={() => setAnchorElUser(null)}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={() => {
+                setLogoffAction()
+                setAnchorElUser(null)
+              }}>
+                <Typography textAlign="center">Sair</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
@@ -72,4 +82,20 @@ const ResponsiveAppBar = ({ currentUser }: Props) => {
     </AppBar>
   );
 };
-export default ResponsiveAppBar;
+
+function mapStateToProps(state: RootState) {
+  return {
+    currentUser: state.currentUser
+  }
+}
+
+function mapDispatchToProps(dispatch: any) {
+  return bindActionCreators({
+    setLogoffAction: userActions.setLogoffAction
+  }, dispatch)
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ResponsiveAppBar)

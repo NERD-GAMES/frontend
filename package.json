@@ -21,9 +21,13 @@
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
     "react-router": "^6.1.1",
     "react-router-dom": "^6.1.1",
     "react-scripts": "4.0.3",
+    "redux": "^4.1.2",
+    "redux-persist": "^6.0.0",
+    "reduxsauce": "^1.2.1",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1",
     "yarn": "^1.22.17"

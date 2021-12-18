@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { IRoom, IUser } from "./../../types";
 import { Link } from "react-router-dom";
 import api from "../../api";
 import AddOrEditRoomModal from "./components/addOrEditRoomModal";
-
-interface Props {
-  currentUser: IUser,
-}
 
 interface IModal {
   open: boolean
   data?: IRoom
 }
 
-const Game1Rooms = ({ currentUser }: Props) => {
+const Game1Rooms = () => {
   const [modal, setModal] = useState<IModal>({ open: false })
   const [rooms, setRooms] = useState<IRoom[]>([])
 
@@ -34,6 +30,16 @@ const Game1Rooms = ({ currentUser }: Props) => {
       <Grid container spacing={2} direction="column" alignItems="center"
         justifyContent="center" style={{ height: "100vh" }}>
         <Grid item>
+          <Typography variant="h2" color="firebrick">
+            Batalha Naval Xadrez
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography variant="h5" color="firebrick">
+            Batalha Naval
+          </Typography>
+        </Grid>
+        <Grid item>
           <Button
             variant="contained"
             onClick={() => setModal({ open: true })}
@@ -51,7 +57,6 @@ const Game1Rooms = ({ currentUser }: Props) => {
 
       {modal.open &&
         <AddOrEditRoomModal
-          currentUser={currentUser}
           data={modal.data}
           onHide={(r) => {
             setModal({ open: false })

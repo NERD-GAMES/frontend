@@ -5,18 +5,18 @@ import GamePlay from './game1/GamePlay';
 import Rooms from './game1/Rooms';
 import Home from "./home";
 import Admin from "./admin";
+import Store from "./store";
 
-interface Props {
-  currentUser: IUser
-}
 
-const Routers = (props: Props) => {
+
+const Routers = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home currentUser={props.currentUser} />} />
-      <Route path="/game1" element={<Rooms currentUser={props.currentUser} />} />
-      <Route path="/game1/:id" element={<GamePlay currentUser={props.currentUser} />} />
-      <Route path="/game1/admin" element={<Admin currentUser={props.currentUser} />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/game1" element={<Rooms />} />
+      <Route path="/game1/:id" element={<GamePlay />} />
+      <Route path="/game1/admin" element={<Admin />} />
+      <Route path="/game1/store" element={<Store />} />
     </Routes>
   )
 }

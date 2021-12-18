@@ -1,20 +1,25 @@
 import React, { useState } from "react";
-import { Avatar, Badge, Button, Card, CardActions, CardContent, CardHeader, Dialog, DialogActions, DialogContent, DialogTitle, Fab, Grid, IconButton, InputAdornment, MenuItem, Paper, Tab, Tabs, TextField } from "@mui/material";
+import { Avatar, Badge, Button, Card, CardActions, CardContent, CardHeader, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Fab, FormControlLabel, Grid, IconButton, InputAdornment, MenuItem, Paper, Tab, Tabs, TextField } from "@mui/material";
 import { Add as AddIcon, Close as CloseIcon, PhotoCamera } from "@mui/icons-material";
 import api from "../../api";
 import CardHero from "../../components/CardHero";
 import Title from "../../components/Title";
 import { IHero, IHeroPart, IUser } from "../../types";
 import { cloneDeep } from 'lodash';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import { RootState } from "../../store";
+import { connect } from "react-redux";
 
 interface Props {
-  currentUser: IUser
+  currentUser?: IUser
   onHide: (refresh?: boolean) => void
   data?: IHero
 }
 
 const INITIAL_HERO: IHero = {
   name: "",
+  userId: "",
+  enabled: false,
   attack: 500,
   defense: 400,
   parts: [{ type: "head" }]
@@ -100,24 +105,46 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                     onChange={(e) => setHero({ ...hero, description: e.target.value })}
                   />
                 </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Preço"
+                    variant="filled"
+                    type="number"
+                    value={hero.price || ""}
+                    onChange={(e) => setHero({ ...hero, price: parseInt(e.target.value) })}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControlLabel
+                    label="Ativo"
+                    control={
+                      <Checkbox
+                        onChange={(e) => setHero({ ...hero, enabled: e.target.checked })}
+                        checked={hero.enabled}
+                      />
+                    }
+                  />
+                </Grid>
               </Grid>
             }
 
             {tab === 1 &&
               <Grid container spacing={2} style={{ marginTop: 10 }}>
                 <Grid item xs={12}>
-                  <Title title="Montagem" right={(
-                    <Fab
-                      size="small"
-                      variant="extended"
-                      onClick={() => {
-                        const parts = hero?.parts || []
-                        setHero({ ...hero, parts: [...parts, {}] })
-                      }} aria-label="add">
-                      <AddIcon />
-                      Adiconar
-                    </Fab>
-                  )}
+                  <Title title="Montagem"
+                    right={(
+                      <Fab
+                        size="small"
+                        variant="extended"
+                        onClick={() => {
+                          const parts = hero?.parts || []
+                          setHero({ ...hero, parts: [...parts, {}] })
+                        }} aria-label="add">
+                        <AddIcon />
+                        Adiconar
+                      </Fab>
+                    )}
                   />
                 </Grid>
                 {hero?.parts?.map((partHero, idx) => {
@@ -145,6 +172,7 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                                         </IconButton>
                                       }>
                                         <img
+                                          draggable={false}
                                           style={{ maxHeight: 40 }}
                                           aria-label="upload picture"
                                           src={source}
@@ -164,7 +192,7 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                                         if (files != null && files.length > 0) {
                                           for (let index = 0; index < files.length; index++) {
                                             const f = files[index];
-                                            await api.fileUploader(f, currentUser.id || "sem_id",
+                                            await api.fileUploader(f, currentUser?.id || "sem_id",
                                               (e) => {
                                                 // const perc = e.bytesTransferred / e.totalBytes
                                               },
@@ -180,9 +208,13 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                                         }
                                       }}
                                     />
-                                    <IconButton aria-label="upload picture" component="span">
-                                      <PhotoCamera />
-                                    </IconButton>
+                                    <Fab
+                                      variant="extended"
+                                      size="small" aria-label="upload picture" component="span">
+                                      <AddPhotoAlternateIcon
+                                        fontSize="large" />
+                                      Adicionar
+                                    </Fab>
                                   </label>
                                 </Grid>
                               </Grid>
@@ -283,4 +315,10 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
 }
 
 
-export default AddOrEditHeroModal
+function mapStateToProps(state: RootState) {
+  return {
+    currentUser: state.currentUser
+  }
+}
+
+export default connect(mapStateToProps)(AddOrEditHeroModal)

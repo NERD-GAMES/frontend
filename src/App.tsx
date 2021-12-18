@@ -1,24 +1,37 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import Login from './components/Login';
 import ResponsiveAppBar from './components/ResponsiveAppBar';
 import Router from './pages/router';
+import { RootState } from './store';
 import { IUser } from './types';
 
-function App() {
-  const [currentUser, setCurrentUser] = useState<IUser>()
+interface Props {
+  currentUser?: IUser
+}
 
-  if (!currentUser) {
+function App({ currentUser }: Props) {
+  if (!currentUser?.id) {
     return (
-      <Login setUser={setCurrentUser} />
+      <Login />
     )
   }
 
   return (
     <div>
-      <ResponsiveAppBar currentUser={currentUser}/>
-      <Router currentUser={currentUser}/>
+      <ResponsiveAppBar />
+      <Router />
     </div>
   );
 }
 
-export default App;
+
+
+function mapStateToProps(state: RootState) {
+  return {
+    currentUser: state.currentUser
+  }
+}
+
+
+export default connect(mapStateToProps)(App)

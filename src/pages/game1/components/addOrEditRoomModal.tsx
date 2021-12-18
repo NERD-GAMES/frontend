@@ -4,9 +4,10 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuIt
 import api from "./../../../api";
 import Title from "../../../components/Title";
 import { IRoom, IUser } from "../../../types";
+import { connect } from "react-redux";
+import { RootState } from "../../../store";
 
 interface Props {
-  currentUser: IUser
   onHide: (refresh?: boolean) => void
   data?: IRoom
 }
@@ -16,7 +17,7 @@ const INITIAL_HERO: IRoom = {
   size: "md"
 }
 
-const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
+const AddOrEditHeroModal = ({ onHide, data }: Props) => {
   const nav = useNavigate()
   const [room, setRoom] = useState({ ...INITIAL_HERO, ...data })
 
@@ -66,6 +67,5 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
     </Dialog>
   )
 }
-
 
 export default AddOrEditHeroModal

@@ -5,6 +5,8 @@ import Board from './components/board';
 import CardHero from './../../components/CardHero';
 import { IDeckItem, IUser, IHero, IRoom } from './../../types';
 import api from './../../api';
+import { connect } from 'react-redux';
+import { RootState } from '../../store';
 
 export interface IPlayer {
   id: string
@@ -26,7 +28,7 @@ const players: IPlayer[] = [
 ]
 
 interface Props {
-  currentUser: IUser
+  currentUser?: IUser
 }
 
 function Game1Play({ currentUser }: Props) {
@@ -37,11 +39,11 @@ function Game1Play({ currentUser }: Props) {
   const [heroSelected, setHeroSelected] = useState<IDeckItem>()
 
   const currentPlayer = players.find(x => x.id === turn.playerId)
-  const cardsOfCurrentUser = (heroes || []).filter(x => x.userId === currentUser.id)
+  const cardsOfCurrentUser = (heroes || []).filter(x => x.userId === currentUser?.id)
   const cardsOfCurrentPlayer = (heroes || []).filter(x => x.userId === turn.playerId)
-  const cardsInDeck = (cardsOfCurrentPlayer || []).filter(x => x.status === 0)
-  const cardsInHand = (cardsOfCurrentPlayer || []).filter(x => x.status === 1)
-  const cardsInBoard = (cardsOfCurrentPlayer || []).filter(x => x.status === 2)
+  const cardsInDeck = (cardsOfCurrentUser || []).filter(x => x.status === 0)
+  const cardsInHand = (cardsOfCurrentUser || []).filter(x => x.status === 1)
+  const cardsInBoard = (cardsOfCurrentUser || []).filter(x => x.status === 2)
 
   useEffect(() => {
     const roomId = loc.pathname.split("/")[2]
@@ -49,8 +51,7 @@ function Game1Play({ currentUser }: Props) {
   }, [loc.pathname])
 
   const loadHeroes = () => {
-    const filter: IHero = {}
-    api.getHeros(filter).then((response) => {
+    api.getHeros().then((response) => {
       const deck = response as IDeckItem[]
       const newDeck = deck.map(d => {
         return {
@@ -76,7 +77,6 @@ function Game1Play({ currentUser }: Props) {
             cardsInBoard={cardsInBoard}
             onSelected={(x, y) => {
               setHeroes(heroes.map((_a, idx) => {
-                debugger
                 if (_a.id === heroSelected?.id) {
                   return { ..._a, x, y, status: 2 }
                 }
@@ -166,4 +166,11 @@ function Game1Play({ currentUser }: Props) {
   );
 }
 
-export default Game1Play;
+
+function mapStateToProps(state: RootState) {
+  return {
+    currentUser: state.currentUser
+  }
+}
+
+export default connect(mapStateToProps)(Game1Play)

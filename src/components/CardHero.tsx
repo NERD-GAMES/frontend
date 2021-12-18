@@ -1,5 +1,5 @@
 import { Avatar, Card, CardActionArea, CardContent, CardHeader, Chip, Grid, Tooltip, Typography } from "@mui/material"
-import { IHero, IHeroPart } from "../types"
+import { IHero } from "../types"
 import 'animate.css';
 
 
@@ -11,26 +11,28 @@ interface Props {
 const CardHero = ({ onClick, hero }: Props) => {
   const tipo = (hero?.tipo || "").toLocaleUpperCase()
   return (
-    <Card sx={{ width: 345 }} >
+    <Card sx={{ width: 345, backgroundImage: "url(/frontend/img/bg.jpg)" }} >
       <CardActionArea onClick={onClick}>
         <CardHeader
           avatar={
             <Tooltip title={tipo}>
               <Avatar
+                variant="square"
                 src={`/frontend/img/${hero?.tipo}.png`}
-                sx={{ padding: 1 }} 
-                aria-label="recipe"
+                imgProps={{
+                  draggable: false
+                }}
               />
-                {/* {(tipo?.split("")[0])} */}
-              {/* </Avatar> */}
             </Tooltip>
           }
           title={hero.name}
-          // subheader={<Rating size="small" value={hero.stars || 0} />}
         />
-        <CardContent>
+        <CardContent >
           <div
-            style={{ position: "relative", height: 300, border: "1px solid #CCC" }}>
+            style={{
+              position: "relative", height: 300, border: "1px solid #CCC",
+              backgroundColor: "white"
+            }}>
 
             {hero?.parts?.map((partHero) => {
               let style = {}
@@ -43,6 +45,7 @@ const CardHero = ({ onClick, hero }: Props) => {
               return (
                 <img
                   alt=""
+                  draggable={false}
                   src={partHero?.photosURL && partHero?.photosURL[0]}
                   className={partHero?.className}
                   style={{ ...style, position: "absolute", fill: "yellow" }}
@@ -52,18 +55,22 @@ const CardHero = ({ onClick, hero }: Props) => {
           </div>
 
 
-          <Grid container justifyContent="space-between" style={{ marginTop: 10 }}>
+          <Grid container spacing={2} justifyContent="space-between" style={{ marginTop: 4 }}>
             <Grid item>
-              <Chip size="small" label={`Ataque: ${hero.attack}`} />
+              <Chip color="secondary" size="small" label={`Ataque: ${hero.attack}`} />
             </Grid>
             <Grid item>
-              <Chip size="small" label={`Defesa: ${hero.defense}`} />
+              <Chip color="secondary" size="small" label={`Defesa: ${hero.defense}`} />
+            </Grid>
+            <Grid item xs={12}>
+              <div style={{ backgroundColor: "#FFFD", padding: 8, height: 60 }}>
+                <Typography variant="body2" color="text.secondary">
+                  {hero.description}
+                </Typography>
+              </div>
             </Grid>
           </Grid>
 
-          <Typography variant="body2" color="text.secondary">
-            {hero.description}
-          </Typography>
         </CardContent>
       </CardActionArea>
     </Card>

@@ -27,6 +27,8 @@ export interface IHero {
   description?: string
   userId?: string
   tipo?: string
+  price?: number
+  enabled?: boolean
   parts?: IHeroPart[]
 }
 
@@ -43,7 +45,8 @@ export interface IBoard {
 
 export interface IUser {
   id?: string
-  email: string
-  name: string | null | undefined
-  photoURL: string | null | undefined
+  email?: string
+  gems?: number
+  name?: string | null | undefined
+  photoURL?: string | null | undefined
 }

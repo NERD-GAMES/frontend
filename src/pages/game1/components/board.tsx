@@ -64,7 +64,7 @@ function Board({ players, cardsInBoard, size, onSelected }: Props) {
                     }}>
                       {cell?.photoURL &&
                         <img
-                          // draggable={false}
+                          draggable={false}
                           style={{ maxWidth: "100%", maxHeight: "100%" }}
                           src={cell.photoURL}
                           alt="hero"
