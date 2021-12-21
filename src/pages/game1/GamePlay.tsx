@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Fab, Grid, IconButton, Typography } from '@mui/material';
 import Board from './components/board';
 import CardHero from './../../components/CardHero';
 import { IDeckItem, IUser, IHero, IRoom } from './../../types';
@@ -40,7 +40,7 @@ function Game1Play({ currentUser }: Props) {
 
   const currentPlayer = players.find(x => x.id === turn.playerId)
   const cardsOfCurrentUser = (heroes || []).filter(x => x.userId === currentUser?.id)
-  const cardsOfCurrentPlayer = (heroes || []).filter(x => x.userId === turn.playerId)
+  // const cardsOfCurrentPlayer = (heroes || []).filter(x => x.userId === turn.playerId)
   const cardsInDeck = (cardsOfCurrentUser || []).filter(x => x.status === 0)
   const cardsInHand = (cardsOfCurrentUser || []).filter(x => x.status === 1)
   const cardsInBoard = (cardsOfCurrentUser || []).filter(x => x.status === 2)
@@ -86,40 +86,8 @@ function Game1Play({ currentUser }: Props) {
             }}
           />
         </Grid>
-        <Grid item>
 
-          <Grid container spacing={1} justifyContent="center" direction="column">
-            {players.map((p, idx) => {
-              return (
-                <Grid item>
-                  <Button
-                    style={{ [p.id === currentPlayer?.id ? "backgroundColor" : "borderColor"]: p.color, width: 300 }}
-                    variant={p.id === currentPlayer?.id ? "contained" : "outlined"}
-                    onClick={() => setTurn({ fase: 0, playerId: p.id })}>
-                    {p.nickName}
-                  </Button>
-                </Grid>
-              )
-            })}
-            <Grid item>
-              <Button
-                style={{ width: 300, padding: 50, marginTop: 50 }}
-                size="large"
-                variant="outlined" onClick={() => setTurn({
-                  ...turn,
-                  fase: turn.fase + 1
-                })}>{turns[turn.fase + 1]}
-              </Button>
-            </Grid>
-          </Grid>
-
-        </Grid>
-        <Grid item xs={12} style={{ textAlign: "center" }}>
-          <Typography variant="h3">
-            É a vez de {players.find(p => p?.id === currentPlayer?.id)?.nickName}
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{}}>
           <Grid container spacing={2} justifyContent="center">
             {cardsInHand.map((p, idx) => {
               let border = "5px solid #CCCCCC"
@@ -160,6 +128,39 @@ function Game1Play({ currentUser }: Props) {
               </Grid>
             }
           </Grid>
+        </Grid>
+
+        <Grid item xs={12} style={{ textAlign: "center" }}>
+          <Typography variant="h3">
+            É a vez de {players.find(p => p?.id === currentPlayer?.id)?.nickName}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Grid container spacing={1} justifyContent="center" direction="column">
+            {players.map((p, idx) => {
+              return (
+                <Grid item>
+                  <Fab
+                    style={{ [p.id === currentPlayer?.id ? "backgroundColor" : "borderColor"]: p.color }}
+                    variant={p.id === currentPlayer?.id ? "extended" : "circular"}
+                    onClick={() => setTurn({ fase: 0, playerId: p.id })}>
+                    {p.nickName}
+                  </Fab>
+                </Grid>
+              )
+            })}
+            <Grid item>
+              <Button
+                style={{ width: 300, padding: 50, marginTop: 50 }}
+                size="large"
+                variant="outlined" onClick={() => setTurn({
+                  ...turn,
+                  fase: turn.fase + 1
+                })}>{turns[turn.fase + 1]}
+              </Button>
+            </Grid>
+          </Grid>
+
         </Grid>
       </Grid >
     </>
