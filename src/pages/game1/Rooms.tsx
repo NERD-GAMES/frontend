@@ -49,7 +49,7 @@ const Game1Rooms = () => {
         {rooms.map(r => {
           return (
             <Grid item key={r.id}>
-              <Link to={`/game1/${r.id}`}>Sala: {r.name} ({r.id})</Link>
+              <Link to={`/game/${r.id}`}>Sala: {r.name} ({r.id})</Link>
             </Grid>
           )
         })}

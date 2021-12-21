@@ -17,18 +17,16 @@ const Home = ({ currentUser }: Props) => {
         Ola, {currentUser?.name}
       </Grid>
       <Grid item>
-        <Button style={{ padding: 40 }} variant="contained" to="/game1/admin" component={LinkRoute}>Admin</Button>
+        <Button style={{ padding: 40 }} variant="contained" to="/admin" component={LinkRoute}>Admin</Button>
       </Grid>
       <Grid item>
-        <Button style={{ padding: 40 }} variant="contained" to="/game1/store" component={LinkRoute}>Loja</Button>
+        <Button style={{ padding: 40 }} variant="contained" to="/store" component={LinkRoute}>Loja</Button>
       </Grid>
       <Grid item>
-        <Button style={{ padding: 40 }} variant="contained" to="/game1" component={LinkRoute}>
-          Batalha
-        </Button>
+        <Button style={{ padding: 40 }} variant="contained" to="/game" component={LinkRoute}>Batalha</Button>
       </Grid>
       <Grid item>
-        <Button style={{ padding: 40 }} variant="contained" to="/game1/Decks" component={LinkRoute}>Meus Deck</Button>
+        <Button style={{ padding: 40 }} variant="contained" to="/deck" component={LinkRoute}>Meus Deck</Button>
       </Grid>
     </Grid>
   )

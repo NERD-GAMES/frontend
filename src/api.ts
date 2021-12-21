@@ -94,6 +94,17 @@ export default {
       }
     })
   },
+  getHerosByUserId: async (userId: string) => {
+    const heroesRef = collection(db, 'heroes');
+    const q = query(heroesRef, where("userId", '==', userId), where("enabled", '==', true));
+    const documentSnapshots = await getDocs(q);
+
+    return documentSnapshots.docs.map(doc => {
+      return {
+        id: doc.id, ...doc.data()
+      }
+    })
+  },
   getRoomById: async (id: string, setRoom: React.Dispatch<React.SetStateAction<IRoom | undefined>>) => {
     await db.collection("rooms").doc(id).onSnapshot((response) => {
       setRoom(response.data())

@@ -13,6 +13,7 @@ export interface IRoom {
 export interface IHeroPart {
   photosURL?: string[]
   style?: string
+  width?: number
   className?: string
   type?: string
   interval?: number

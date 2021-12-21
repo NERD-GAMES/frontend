@@ -1,81 +1,94 @@
-import { Avatar, Card, CardActionArea, CardContent, CardHeader, Chip, Grid, Tooltip, Typography } from "@mui/material"
-import { IHero } from "../types"
-import 'animate.css';
-
+import {
+  Avatar,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardHeader,
+  Chip,
+  Grid,
+  SvgIcon,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { IHero } from "../types";
+import HeroTransform from "./HeroTransform";
 
 interface Props {
-  onClick?: React.MouseEventHandler<HTMLButtonElement>
-  hero: IHero
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  hero: IHero;
 }
 
 const CardHero = ({ onClick, hero }: Props) => {
-  const tipo = (hero?.tipo || "").toLocaleUpperCase()
+  const tipo = (hero?.tipo || "").toLocaleUpperCase();
   return (
-    <Card sx={{ width: 345, backgroundImage: "url(/frontend/img/bg.jpg)" }} >
+    <Card style={{ backgroundImage: "url(/frontend/img/bg.jpg)" }}>
       <CardActionArea onClick={onClick}>
         <CardHeader
+          action={
+            !hero.enabled && (
+              <Chip color="error" label="Rascunho" variant="filled" />
+            )
+          }
           avatar={
             <Tooltip title={tipo}>
               <Avatar
+                style={{ width: "2vw", height: "2vw" }}
                 variant="square"
                 src={`/frontend/img/${hero?.tipo}.png`}
                 imgProps={{
-                  draggable: false
+                  draggable: false,
                 }}
               />
             </Tooltip>
           }
           title={hero.name}
         />
-        <CardContent >
+        <CardContent style={{ paddingTop: 0, paddingBottom: 8 }}>
           <div
             style={{
-              position: "relative", height: 300, border: "1px solid #CCC",
-              backgroundColor: "white"
-            }}>
-
-            {hero?.parts?.map((partHero) => {
-              let style = {}
-              try {
-                style = JSON.parse(partHero?.style || "")
-              } catch (error) {
-
-              }
-
-              return (
-                <img
-                  alt=""
-                  draggable={false}
-                  src={partHero?.photosURL && partHero?.photosURL[0]}
-                  className={partHero?.className}
-                  style={{ ...style, position: "absolute", fill: "yellow" }}
-                />
-              )
-            })}
+              height: "12vw",
+              minWidth: "120px",
+              width: "12vw",
+              border: "1px solid #CCC",
+              backgroundColor: "white",
+              minHeight: "120px",
+            }}
+          >
+            <HeroTransform hero={hero} />
           </div>
 
+          <div
+            style={{
+              backgroundColor: "#FFFD",
+              margin: "8px 0",
+              border: "1px solid #CCC",
+              height: "5vw",
+              width: "12vw",
+              minWidth: "120px",
+              minHeight: "50px",
+            }}
+          >
+            <Typography variant="body2" color="text.secondary">
+              {hero.description}
+            </Typography>
+          </div>
 
-          <Grid container spacing={2} justifyContent="space-between" style={{ marginTop: 4 }}>
-            <Grid item>
-              <Chip color="secondary" size="small" label={`Ataque: ${hero.attack}`} />
-            </Grid>
-            <Grid item>
-              <Chip color="secondary" size="small" label={`Defesa: ${hero.defense}`} />
-            </Grid>
-            <Grid item xs={12}>
-              <div style={{ backgroundColor: "#FFFD", padding: 8, height: 60 }}>
-                <Typography variant="body2" color="text.secondary">
-                  {hero.description}
-                </Typography>
-              </div>
-            </Grid>
-          </Grid>
-
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Chip
+              style={{ fontSize: 10 }}
+              size="small"
+              label={`ATK: ${hero.attack}`}
+            />
+            <Chip
+              style={{ fontSize: 10 }}
+              size="small"
+              label={`DEF: ${hero.defense}`}
+            />
+          </div>
         </CardContent>
       </CardActionArea>
     </Card>
-  )
-}
+  );
+};
 
-
-export default CardHero
+export default CardHero;

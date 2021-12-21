@@ -6,6 +6,7 @@ import Rooms from './game1/Rooms';
 import Home from "./home";
 import Admin from "./admin";
 import Store from "./store";
+import Deck from "./deck";
 
 
 
@@ -13,10 +14,11 @@ const Routers = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/game1" element={<Rooms />} />
-      <Route path="/game1/:id" element={<GamePlay />} />
-      <Route path="/game1/admin" element={<Admin />} />
-      <Route path="/game1/store" element={<Store />} />
+      <Route path="/game" element={<Rooms />} />
+      <Route path="/game/:id" element={<GamePlay />} />
+      <Route path="/admin" element={<Admin />} />
+      <Route path="/store" element={<Store />} />
+      <Route path="/deck" element={<Deck />} />
     </Routes>
   )
 }

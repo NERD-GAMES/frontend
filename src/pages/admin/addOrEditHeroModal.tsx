@@ -1,19 +1,47 @@
 import React, { useState } from "react";
-import { Avatar, Badge, Button, Card, CardActions, CardContent, CardHeader, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Fab, FormControlLabel, Grid, IconButton, InputAdornment, MenuItem, Paper, Tab, Tabs, TextField } from "@mui/material";
-import { Add as AddIcon, Close as CloseIcon, PhotoCamera } from "@mui/icons-material";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Fab,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  InputAdornment,
+  MenuItem,
+  Paper,
+  Slider,
+  Tab,
+  Tabs,
+  TextField,
+} from "@mui/material";
+import {
+  Add as AddIcon,
+  Close as CloseIcon,
+  PhotoCamera,
+} from "@mui/icons-material";
 import api from "../../api";
 import CardHero from "../../components/CardHero";
 import Title from "../../components/Title";
 import { IHero, IHeroPart, IUser } from "../../types";
-import { cloneDeep } from 'lodash';
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import { cloneDeep } from "lodash";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { RootState } from "../../store";
 import { connect } from "react-redux";
 
 interface Props {
-  currentUser?: IUser
-  onHide: (refresh?: boolean) => void
-  data?: IHero
+  currentUser?: IUser;
+  onHide: (refresh?: boolean) => void;
+  data?: IHero;
 }
 
 const INITIAL_HERO: IHero = {
@@ -22,17 +50,17 @@ const INITIAL_HERO: IHero = {
   enabled: false,
   attack: 500,
   defense: 400,
-  parts: [{ type: "head" }]
-}
+  parts: [{ type: "head" }],
+};
 
 const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
-  const [tab, setTab] = useState(0)
-  const [hero, setHero] = useState(cloneDeep({ ...INITIAL_HERO, ...data }))
+  const [tab, setTab] = useState(0);
+  const [hero, setHero] = useState(cloneDeep({ ...INITIAL_HERO, ...data }));
 
   const onSave = async () => {
-    await api.addOrUpdateHero(hero)
-    onHide(true)
-  }
+    await api.addOrUpdateHero(hero);
+    onHide(true);
+  };
 
   return (
     <Dialog open maxWidth="lg" fullWidth onClose={() => onHide()}>
@@ -42,12 +70,11 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
       <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs>
-
             <Tabs value={tab} onChange={(a, b) => setTab(b)}>
               <Tab label="Gerais"></Tab>
               <Tab label="Montagem"></Tab>
             </Tabs>
-            {tab === 0 &&
+            {tab === 0 && (
               <Grid container spacing={2} style={{ marginTop: 10 }}>
                 <Grid item xs={9}>
                   <TextField
@@ -65,7 +92,8 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                     variant="filled"
                     value={hero.tipo || ""}
                     onChange={(e) => setHero({ ...hero, tipo: e.target.value })}
-                    select>
+                    select
+                  >
                     <MenuItem value="peao">Peão</MenuItem>
                     <MenuItem value="torre">Torre</MenuItem>
                     <MenuItem value="cavalo">Cavalo</MenuItem>
@@ -80,7 +108,9 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                     variant="filled"
                     type="number"
                     value={hero.attack}
-                    onChange={(e) => setHero({ ...hero, attack: parseInt(e.target.value) })}
+                    onChange={(e) =>
+                      setHero({ ...hero, attack: parseInt(e.target.value) })
+                    }
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -90,7 +120,9 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                     variant="filled"
                     type="number"
                     value={hero.defense || ""}
-                    onChange={(e) => setHero({ ...hero, defense: parseInt(e.target.value) })}
+                    onChange={(e) =>
+                      setHero({ ...hero, defense: parseInt(e.target.value) })
+                    }
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -102,7 +134,9 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                     variant="filled"
                     type="number"
                     value={hero.description || ""}
-                    onChange={(e) => setHero({ ...hero, description: e.target.value })}
+                    onChange={(e) =>
+                      setHero({ ...hero, description: e.target.value })
+                    }
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -112,7 +146,9 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                     variant="filled"
                     type="number"
                     value={hero.price || ""}
-                    onChange={(e) => setHero({ ...hero, price: parseInt(e.target.value) })}
+                    onChange={(e) =>
+                      setHero({ ...hero, price: parseInt(e.target.value) })
+                    }
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -120,31 +156,36 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                     label="Ativo"
                     control={
                       <Checkbox
-                        onChange={(e) => setHero({ ...hero, enabled: e.target.checked })}
+                        onChange={(e) =>
+                          setHero({ ...hero, enabled: e.target.checked })
+                        }
                         checked={hero.enabled}
                       />
                     }
                   />
                 </Grid>
               </Grid>
-            }
+            )}
 
-            {tab === 1 &&
+            {tab === 1 && (
               <Grid container spacing={2} style={{ marginTop: 10 }}>
                 <Grid item xs={12}>
-                  <Title title="Montagem"
-                    right={(
+                  <Title
+                    title="Montagem"
+                    right={
                       <Fab
                         size="small"
                         variant="extended"
                         onClick={() => {
-                          const parts = hero?.parts || []
-                          setHero({ ...hero, parts: [...parts, {}] })
-                        }} aria-label="add">
+                          const parts = hero?.parts || [];
+                          setHero({ ...hero, parts: [...parts, {}] });
+                        }}
+                        aria-label="add"
+                      >
                         <AddIcon />
                         Adiconar
                       </Fab>
-                    )}
+                    }
                   />
                 </Grid>
                 {hero?.parts?.map((partHero, idx) => {
@@ -158,19 +199,23 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                                 {partHero?.photosURL?.map((source, idx2) => {
                                   return (
                                     <Grid item>
-                                      <Badge badgeContent={
-                                        <IconButton
-                                          onClick={(e) => {
-                                            const parts = hero.parts as IHeroPart[]
-                                            const photosURL = parts[idx].photosURL
-                                            photosURL?.splice(idx2, 1)
-                                            parts[idx].photosURL = photosURL
-                                            setHero({ ...hero, parts })
-                                          }}
-                                        >
-                                          <CloseIcon />
-                                        </IconButton>
-                                      }>
+                                      <Badge
+                                        badgeContent={
+                                          <IconButton
+                                            onClick={(e) => {
+                                              const parts =
+                                                hero.parts as IHeroPart[];
+                                              const photosURL =
+                                                parts[idx].photosURL;
+                                              photosURL?.splice(idx2, 1);
+                                              parts[idx].photosURL = photosURL;
+                                              setHero({ ...hero, parts });
+                                            }}
+                                          >
+                                            <CloseIcon />
+                                          </IconButton>
+                                        }
+                                      >
                                         <img
                                           draggable={false}
                                           style={{ maxHeight: 40 }}
@@ -179,7 +224,7 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                                         />
                                       </Badge>
                                     </Grid>
-                                  )
+                                  );
                                 })}
                                 <Grid item>
                                   <label htmlFor={`imput_${idx}`}>
@@ -188,31 +233,45 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                                       type="file"
                                       multiple={false}
                                       onChange={async (e) => {
-                                        const files = e.target.files
+                                        const files = e.target.files;
                                         if (files != null && files.length > 0) {
-                                          for (let index = 0; index < files.length; index++) {
+                                          for (
+                                            let index = 0;
+                                            index < files.length;
+                                            index++
+                                          ) {
                                             const f = files[index];
-                                            await api.fileUploader(f, currentUser?.id || "sem_id",
+                                            await api.fileUploader(
+                                              f,
+                                              currentUser?.id || "sem_id",
                                               (e) => {
                                                 // const perc = e.bytesTransferred / e.totalBytes
                                               },
                                               console.log,
                                               (url) => {
-                                                const parts = [...(hero?.parts || [])]
-                                                const photosURL = parts[idx].photosURL || []
-                                                parts[idx].photosURL = [...photosURL, url]
-                                                setHero({ ...hero, parts })
+                                                const parts = [
+                                                  ...(hero?.parts || []),
+                                                ];
+                                                const photosURL =
+                                                  parts[idx].photosURL || [];
+                                                parts[idx].photosURL = [
+                                                  ...photosURL,
+                                                  url,
+                                                ];
+                                                setHero({ ...hero, parts });
                                               }
-                                            )
+                                            );
                                           }
                                         }
                                       }}
                                     />
                                     <Fab
                                       variant="extended"
-                                      size="small" aria-label="upload picture" component="span">
-                                      <AddPhotoAlternateIcon
-                                        fontSize="large" />
+                                      size="small"
+                                      aria-label="upload picture"
+                                      component="span"
+                                    >
+                                      <AddPhotoAlternateIcon fontSize="large" />
                                       Adicionar
                                     </Fab>
                                   </label>
@@ -228,11 +287,12 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                                     variant="filled"
                                     value={partHero?.type}
                                     onChange={(e) => {
-                                      const parts = hero.parts as IHeroPart[]
-                                      parts[idx].type = e.target.value
-                                      setHero({ ...hero, parts })
+                                      const parts = hero.parts as IHeroPart[];
+                                      parts[idx].type = e.target.value;
+                                      setHero({ ...hero, parts });
                                     }}
-                                    select>
+                                    select
+                                  >
                                     <MenuItem value="all">Completo</MenuItem>
                                     <MenuItem value="head">Cabeça</MenuItem>
                                     <MenuItem value="body">Corpo</MenuItem>
@@ -246,10 +306,28 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                                     variant="filled"
                                     value={partHero?.interval}
                                     onChange={(e) => {
-                                      const parts = hero.parts as IHeroPart[]
-                                      parts[idx].interval = parseInt(e.target.value)
-                                      setHero({ ...hero, parts })
+                                      const parts = hero.parts as IHeroPart[];
+                                      parts[idx].interval = parseInt(
+                                        e.target.value
+                                      );
+                                      setHero({ ...hero, parts });
                                     }}
+                                  />
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <Slider
+                                    aria-label="Temperature"
+                                    value={partHero?.width}
+                                    valueLabelDisplay="auto"
+                                    step={5}
+                                    marks
+                                    onChange={(event, newValue) => {
+                                      const parts = hero.parts as IHeroPart[];
+                                      parts[idx].width = newValue as number;
+                                      setHero({ ...hero, parts });
+                                    }}
+                                    min={0}
+                                    max={100}
                                   />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -259,9 +337,9 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                                     variant="filled"
                                     value={partHero?.style}
                                     onChange={(e) => {
-                                      const parts = hero.parts as IHeroPart[]
-                                      parts[idx].style = e.target.value
-                                      setHero({ ...hero, parts })
+                                      const parts = hero.parts as IHeroPart[];
+                                      parts[idx].style = e.target.value;
+                                      setHero({ ...hero, parts });
                                     }}
                                   />
                                 </Grid>
@@ -272,9 +350,9 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                                     variant="filled"
                                     value={partHero?.className}
                                     onChange={(e) => {
-                                      const parts = hero.parts as IHeroPart[]
-                                      parts[idx].className = e.target.value
-                                      setHero({ ...hero, parts })
+                                      const parts = hero.parts as IHeroPart[];
+                                      parts[idx].className = e.target.value;
+                                      setHero({ ...hero, parts });
                                     }}
                                   />
                                 </Grid>
@@ -285,40 +363,41 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                         <CardActions style={{ justifyContent: "end" }}>
                           <Fab
                             onClick={(e) => {
-                              const parts = hero.parts as IHeroPart[]
-                              parts?.splice(idx, 1)
-                              setHero({ ...hero, parts })
+                              const parts = hero.parts as IHeroPart[];
+                              parts?.splice(idx, 1);
+                              setHero({ ...hero, parts });
                             }}
-                            color="secondary" size="small" variant="extended">
+                            color="secondary"
+                            size="small"
+                            variant="extended"
+                          >
                             Remover
                           </Fab>
                         </CardActions>
                       </Card>
                     </Grid>
-                  )
+                  );
                 })}
               </Grid>
-            }
+            )}
           </Grid>
-          <Grid item xs={4}>
+          <Grid item>
             <h4>Preview do Herói</h4>
             <CardHero hero={hero} />
           </Grid>
         </Grid>
-
       </DialogContent>
       <DialogActions>
         <Button onClick={onSave}>Salvar</Button>
       </DialogActions>
     </Dialog>
-  )
-}
-
+  );
+};
 
 function mapStateToProps(state: RootState) {
   return {
-    currentUser: state.currentUser
-  }
+    currentUser: state.currentUser,
+  };
 }
 
-export default connect(mapStateToProps)(AddOrEditHeroModal)
+export default connect(mapStateToProps)(AddOrEditHeroModal);
