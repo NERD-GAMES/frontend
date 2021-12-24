@@ -10,9 +10,12 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useState } from "react";
+import { connect } from "react-redux";
 import HeroTransform from "../../../components/HeroTransform";
+import { RootState } from "../../../store";
 import { IDeckItem, IHero } from "../../../types";
 import { IPlayer } from "../GamePlay";
+import "./board.css";
 interface Props {
   players: IPlayer[];
   cardsInBoard: IDeckItem[];
@@ -20,6 +23,7 @@ interface Props {
   onSelected: (x: number, y: number, e: any) => void;
   anchorEl: null | HTMLElement;
   setAnchorEl: any;
+  currentUser: any;
 }
 
 const getSize = (size?: string) => {
@@ -44,13 +48,25 @@ function Board({
   cardsInBoard,
   size,
   onSelected,
-  anchorEl,
-  setAnchorEl,
+  currentUser,
 }: Props) {
   const sizes = getSize(size);
 
   const heigthList = Array.from(Array(sizes.y), (_, i) => i + 1);
   const widthList = Array.from(Array(sizes.x), (_, i) => i + 1);
+  const cellsVisible = [{ x: -1, y: -1 }];
+  cardsInBoard
+    .filter((x) => x.userId === currentUser.id)
+    .forEach((element) => {
+      cellsVisible.push({ x: (element.x || 0) - 1, y: (element.y || 0) - 1 }); // inferior esquerdo
+      cellsVisible.push({ x: (element.x || 0) - 1, y: element.y || 0 }); // meio esquerda
+      cellsVisible.push({ x: (element.x || 0) - 1, y: (element.y || 0) + 1 }); // superior esquerdo
+      cellsVisible.push({ x: (element.x || 0) + 1, y: (element.y || 0) - 1 }); // inferior
+      cellsVisible.push({ x: (element.x || 0) + 1, y: element.y || 0 }); // meio direita
+      cellsVisible.push({ x: (element.x || 0) + 1, y: (element.y || 0) + 1 }); // superior direita
+      cellsVisible.push({ x: element.x || 0, y: (element.y || 0) + 1 }); // superior meio
+      cellsVisible.push({ x: element.x || 0, y: (element.y || 0) - 1 }); // inferior maeio
+    });
   return (
     <>
       <TableContainer style={{ maxWidth: "98vw" }}>
@@ -65,15 +81,30 @@ function Board({
             return (
               <TableRow>
                 {widthList.map((x) => {
-                  let backgroundColor = "#CCC";
-                  const cell = cardsInBoard.find((h) => h.x === x && h.y === y);
-                  if (cell) {
-                    const cellPlayer = players.find(
-                      (p) => p.id === cell.userId
+                  const sty = {
+                    backgroundColor: "#CCC",
+                    border: "2px solid #CCC",
+                  };
+                  const cellVisible = cellsVisible.find(
+                    (h) => h.x === x && h.y === y
+                  );
+
+                  let cell: IDeckItem | undefined = undefined;
+                  if (cellVisible) {
+                    cell = cardsInBoard.find((h) => h.x === x && h.y === y);
+                  } else {
+                    cell = cardsInBoard.find(
+                      (h) =>
+                        h.x === x && h.y === y && h?.userId === currentUser.id
                     );
-                    if (cellPlayer) {
-                      backgroundColor = `${cellPlayer.color}`;
-                    }
+                  }
+                  if (cell || cellVisible) {
+                    sty.backgroundColor = ``;
+                    if (cell) {
+                      sty.border = `2px solid ${
+                        cell?.userId === currentUser.id ? "blue" : "red"
+                      }`;
+                    } 
                   }
 
                   return (
@@ -84,36 +115,12 @@ function Board({
                         width: "56px",
                         minWidth: "56px",
                         padding: 2,
-                        border: `2px solid ${backgroundColor}`,
+                        ...sty,
                       }}
                       onClick={(e) => onSelected(x, y, e)}
                     >
                       <>
-                        {/* {x === 1 && (
-                      <div style={{ position: "absolute", marginLeft: -30 }}>
-                      {y}
-                      </div>
-                      )}
-                      {y === 1 && (
-                        <div style={{ position: "absolute", marginTop: -50 }}>
-                        {x}
-                        </div>
-                      )} */}
-                        {/* 
-                      {cell?.tipo && (
-                        <Tooltip title={cell?.tipo}>
-                        <Avatar
-                        style={{ width: "2vw", height: "2vw" }}
-                        variant="square"
-                        src={`/frontend/img/${cell?.tipo}.png`}
-                        imgProps={{
-                          draggable: false,
-                        }}
-                        />
-                        </Tooltip>
-                      )} */}
-
-                        {backgroundColor !== "#CCC" && (
+                        {cell && (
                           <Tooltip arrow title={cell?.name || "Sem tipo"}>
                             <div
                               style={{
@@ -139,4 +146,10 @@ function Board({
   );
 }
 
-export default Board;
+function mapStateToProps(state: RootState) {
+  return {
+    currentUser: state.currentUser,
+  };
+}
+
+export default connect(mapStateToProps)(Board);

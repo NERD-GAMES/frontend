@@ -61,7 +61,7 @@ function Game1Play({ currentUser }: Props) {
   );
   const cardsInDeck = (cardsOfCurrentUser || []).filter((x) => !x.status);
   const cardsInHand = (cardsOfCurrentUser || []).filter((x) => x.status === 1);
-  const cardsInBoard = (cardsOfCurrentUser || []).filter((x) => x.status === 2);
+  const cardsInBoard = (heroes || []).filter((x) => x.status === 2);
 
   useEffect(() => {
     const roomId = loc.pathname.split("/")[2];
