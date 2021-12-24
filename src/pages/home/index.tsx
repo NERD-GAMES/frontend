@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, Grid, Link } from "@mui/material";
-import { Link as LinkRoute } from "react-router-dom";
+import { Button, Grid } from "@mui/material";
+import { Link } from "react-router-dom";
 import { IUser } from "../../types";
 import { RootState } from "../../store";
 import { connect } from "react-redux";
@@ -17,16 +17,16 @@ const Home = ({ currentUser }: Props) => {
         Ola, {currentUser?.name}
       </Grid>
       <Grid item>
-        <Button style={{ padding: 40 }} variant="contained" to="/admin" component={LinkRoute}>Admin</Button>
+        <Button style={{ padding: 40 }} variant="contained" to="/admin" component={Link}>Admin</Button>
       </Grid>
       <Grid item>
-        <Button style={{ padding: 40 }} variant="contained" to="/store" component={LinkRoute}>Loja</Button>
+        <Button style={{ padding: 40 }} variant="contained" to="/store" component={Link}>Loja</Button>
       </Grid>
       <Grid item>
-        <Button style={{ padding: 40 }} variant="contained" to="/game" component={LinkRoute}>Batalha</Button>
+        <Button style={{ padding: 40 }} variant="contained" to="/game" component={Link}>Batalha</Button>
       </Grid>
       <Grid item>
-        <Button style={{ padding: 40 }} variant="contained" to="/deck" component={LinkRoute}>Meus Deck</Button>
+        <Button style={{ padding: 40 }} variant="contained" to="/deck" component={Link}>Meus Deck</Button>
       </Grid>
     </Grid>
   )

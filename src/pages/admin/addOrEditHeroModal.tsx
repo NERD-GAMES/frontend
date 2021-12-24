@@ -50,7 +50,7 @@ const INITIAL_HERO: IHero = {
   enabled: false,
   attack: 500,
   defense: 400,
-  parts: [{ type: "head" }],
+  parts: [{ type: "head", width: 100 }],
 };
 
 const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
@@ -178,7 +178,16 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                         variant="extended"
                         onClick={() => {
                           const parts = hero?.parts || [];
-                          setHero({ ...hero, parts: [...parts, {}] });
+                          setHero({
+                            ...hero,
+                            parts: [
+                              ...parts,
+                              {
+                                width: 100,
+                                className: "",
+                              },
+                            ],
+                          });
                         }}
                         aria-label="add"
                       >
@@ -319,7 +328,7 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
                                     aria-label="Temperature"
                                     value={partHero?.width}
                                     valueLabelDisplay="auto"
-                                    step={5}
+                                    // step={5}
                                     marks
                                     onChange={(event, newValue) => {
                                       const parts = hero.parts as IHeroPart[];

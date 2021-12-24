@@ -1,43 +1,52 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Button, Grid } from '@mui/material';
+import React, { useEffect } from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Button, Grid } from "@mui/material";
 
-import Api from '../api';
-import { IUser } from '../types';
+import Api from "../api";
 import { Creators as userActions } from "./../store/ducks/currentUser";
-import { RootState } from '../store';
-
+import { RootState } from "../store";
 
 interface Props {
-  setLoginAction: any
+  setLoginAction: any;
+  setLogoffAction: any;
 }
 
-function Login({ setLoginAction }: Props) {
+function Login({ setLoginAction, setLogoffAction }: Props) {
+  useEffect(() => {
+    setLogoffAction();
+    return () => {};
+  }, []);
 
   const handleFacebookLogin = async () => {
-    const user = await Api.loginWithFacebookPopup()
+    const user = await Api.loginWithFacebookPopup();
     if (user) {
-      await Api.addUser(user)
-      Api.getUserById(user.email, setLoginAction)
+      await Api.addUser(user);
+      Api.getUserById(user.email, setLoginAction);
     }
-  }
+  };
 
   const handleGoogleLogin = async () => {
-    const user = await Api.loginWithGooglePopup()
+    const user = await Api.loginWithGooglePopup();
     if (user) {
-      await Api.addUser(user)
-      Api.getUserById(user.email, setLoginAction)
+      await Api.addUser(user);
+      Api.getUserById(user.email, setLoginAction);
     }
-  }
+  };
 
   return (
-    <Grid container justifyContent="center" alignItems="center" style={{ height: "100vh" }}>
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      style={{ height: "100vh" }}
+    >
       <Grid item>
         <Button
           style={{ width: 300 }}
           variant="outlined"
-          onClick={handleFacebookLogin} >
+          onClick={handleFacebookLogin}
+        >
           Entrar Com Facebook
         </Button>
       </Grid>
@@ -45,27 +54,29 @@ function Login({ setLoginAction }: Props) {
         <Button
           style={{ width: 300 }}
           variant="outlined"
-          onClick={handleGoogleLogin} >
+          onClick={handleGoogleLogin}
+        >
           Entrar Com Google
         </Button>
       </Grid>
-    </Grid >
+    </Grid>
   );
 }
 
 function mapStateToProps(state: RootState) {
   return {
-    currentUser: state.currentUser
-  }
+    currentUser: state.currentUser,
+  };
 }
 
 function mapDispatchToProps(dispatch: any) {
-  return bindActionCreators({
-    setLoginAction: userActions.setLoginAction
-  }, dispatch)
+  return bindActionCreators(
+    {
+      setLoginAction: userActions.setLoginAction,
+      setLogoffAction: userActions.setLogoffAction
+    },
+    dispatch
+  );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

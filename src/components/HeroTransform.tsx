@@ -7,15 +7,6 @@ interface Props {
 }
 
 const HeroTransform = ({ hero }: Props) => {
-  const [infinite, setInfinite] = useState(true);
-  useEffect(() => {
-    const interval = setTimeout(() => {
-      setInfinite(!infinite)
-    }, Math.random() * 10000);
-
-    return () => {clearTimeout(interval)};
-  }, [infinite]);
-
   return (
     <div
       style={{
@@ -36,7 +27,7 @@ const HeroTransform = ({ hero }: Props) => {
             draggable={false}
             src={partHero?.photosURL && partHero?.photosURL[0]}
             className={
-              partHero?.className && `animate__animated ${infinite && "animate__infinite"} ${partHero?.className}`
+              partHero?.className && `animate__animated ${partHero?.className}`
             }
             style={{
               ...style,

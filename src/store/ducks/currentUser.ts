@@ -9,11 +9,11 @@ export const { Types, Creators } = createActions({
 })
 
 const setLogin = (state = INITIAL_STATE, action: any) => {
-  debugger
   return { ...action.user };
 }
 
 const setLogOff = (state = INITIAL_STATE, action: any) => {
+  debugger
   return INITIAL_STATE;
 }
 

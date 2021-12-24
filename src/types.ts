@@ -4,11 +4,13 @@ export interface IRoom {
   id?: string
   name?: string
   type?: string
+  status?: "wait" | "in-prograss" | "done"
   size?: string
   players?: IPlayer[]
+  heroes?: IDeckItem[]
   currentPlayerId?: string
+  turn?: number
 }
-
 
 export interface IHeroPart {
   photosURL?: string[]

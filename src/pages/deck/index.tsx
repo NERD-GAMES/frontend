@@ -54,23 +54,10 @@ const Heroes = ({ currentUser }: Props) => {
           {heroes.map((h) => {
             return (
               <Grid item>
-                <Card style={{ padding: 8 }}>
-                  <CardActionArea
-                    onClick={() => setModal({ open: true, data: h })}
-                  >
-                    <CardHero hero={h} />
-                    <div style={{ padding: 8, textAlign: "center" }}>
-                      <Fab
-                        variant="extended"
-                        size="small"
-                        style={{ marginRight: 8 }}
-                      >
-                        <PaidIcon style={{ marginRight: 8 }} />
-                        {h.price || "Free"}
-                      </Fab>
-                    </div>
-                  </CardActionArea>
-                </Card>
+                <CardHero
+                  hero={h}
+                  onClick={() => setModal({ open: true, data: h })}
+                />
               </Grid>
             );
           })}

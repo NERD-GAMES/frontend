@@ -75,11 +75,13 @@ const CardHero = ({ onClick, hero }: Props) => {
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Chip
+              color="error"
               style={{ fontSize: 10 }}
               size="small"
               label={`ATK: ${hero.attack}`}
             />
             <Chip
+              color="warning"
               style={{ fontSize: 10 }}
               size="small"
               label={`DEF: ${hero.defense}`}
