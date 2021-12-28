@@ -5,8 +5,6 @@ import {
   CardContent,
   CardHeader,
   Chip,
-  Grid,
-  SvgIcon,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -21,11 +19,14 @@ interface Props {
 const CardHero = ({ onClick, hero }: Props) => {
   const tipo = (hero?.tipo || "").toLocaleUpperCase();
   return (
-    <Card style={{ backgroundImage: "url(/frontend/img/bg.jpg)" }}>
+    <Card style={{
+      backgroundImage: "url(/frontend/img/bg.jpg)", minWidth: "120px",
+      width: "18vw",
+    }}>
       <CardActionArea onClick={onClick}>
         <CardHeader
           action={
-            !hero.enabled && (
+            !hero?.enabled && (
               <Chip color="error" label="Rascunho" variant="filled" />
             )
           }
@@ -44,17 +45,8 @@ const CardHero = ({ onClick, hero }: Props) => {
           title={hero.name}
         />
         <CardContent style={{ paddingTop: 0, paddingBottom: 8 }}>
-          <div
-            style={{
-              height: "12vw",
-              minWidth: "120px",
-              width: "12vw",
-              border: "1px solid #CCC",
-              backgroundColor: "white",
-              minHeight: "120px",
-            }}
-          >
-            <HeroTransform hero={hero} />
+          <div style={{ border: "1px solid #CCC", backgroundColor: "white", display: "flex", justifyContent: "center" }}>
+            <HeroTransform hero={hero} size={"12vw"} />
           </div>
 
           <div
@@ -63,8 +55,7 @@ const CardHero = ({ onClick, hero }: Props) => {
               margin: "8px 0",
               border: "1px solid #CCC",
               height: "5vw",
-              width: "12vw",
-              minWidth: "120px",
+              width: "100%",
               minHeight: "50px",
             }}
           >

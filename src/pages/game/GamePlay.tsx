@@ -4,7 +4,11 @@ import {
   Avatar,
   Button,
   Container,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   Drawer,
+  Fab,
   Grid,
   List,
   ListItem,
@@ -13,15 +17,20 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Modal,
   Typography,
+  Zoom,
 } from "@mui/material";
 import Board from "./components/board";
-import { IDeckItem, IUser, IRoom } from "./../../types";
-import api from "./../../api";
+import { IDeckItem, IUser, IRoom, IHero } from "../../types";
+import api from "../../api";
 import { connect } from "react-redux";
 import { RootState } from "../../store";
 import PlayersDrawer from "./components/playersDrawer";
 import HandDrawer from "./components/handDrawer";
+import HeroTransform from "../../components/HeroTransform";
+import CardHero from "../../components/CardHero";
+import BattleModal from "./BattleModal";
 
 export interface IPlayer {
   id?: string;
@@ -46,55 +55,30 @@ function Game1Play({ currentUser }: Props) {
   const loc = useLocation();
   const [room, setRoom] = useState<IRoom>();
   const players = room?.players || [];
-  const heroes = room?.heroes || [];
+  const heroes = room?.heroes?.filter(x => (x?.defense || 0) > 0) || [];
   const turn = room?.turn || "";
   const [heroSelected, setHeroSelected] = useState<IDeckItem>();
   const [showCards, setShowCards] = useState({ open: false });
   const [showPlayers, setShowPlayers] = useState({ open: false });
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const currentPlayer = players.find(
     (x) => x.id === room?.currentPlayerId || ""
-  );
+  )
   const cardsOfCurrentUser = (heroes || []).filter(
     (x) => x.userId === currentUser?.id
-  );
+  )
   const cardsInDeck = (cardsOfCurrentUser || []).filter((x) => !x.status);
   const cardsInHand = (cardsOfCurrentUser || []).filter((x) => x.status === 1);
   const cardsInBoard = (heroes || []).filter((x) => x.status === 2);
 
   useEffect(() => {
-    const roomId = loc.pathname.split("/")[2];
+    const roomId = loc.pathname.split("/")[1];
     const unsubscribe = api.getRoomById(roomId).onSnapshot((doc: any) => {
       setRoom({ ...doc.data(), id: doc.id });
     });
 
     return () => unsubscribe();
   }, [loc.pathname]);
-
-  useEffect(() => {
-    if (
-      heroSelected?.id &&
-      heroSelected?.status === 2 &&
-      heroSelected?.x &&
-      heroSelected?.y
-    ) {
-      api.addOrUpdateRoom({
-        id: room?.id,
-        heroes: heroes.map((_a, idx) => {
-          if (_a.id === heroSelected?.id) {
-            return {
-              ..._a,
-              x: heroSelected?.x || -1,
-              y: heroSelected?.y || -1,
-              status: 2,
-            };
-          }
-          return _a;
-        }),
-      });
-    }
-  }, [heroSelected?.id, heroSelected?.x, heroSelected?.y]);
 
   const setRoomDB = (r: IRoom) => {
     if (room?.id) {
@@ -143,44 +127,21 @@ function Game1Play({ currentUser }: Props) {
         spacing={2}
         style={{ marginTop: 20 }}
       >
-        <Grid item xs={12} style={{ textAlign: "center" }}>
+        <Grid item style={{ textAlign: "center" }}>
           {turns[turn || 0]}
-        </Grid>
-        <Grid item>
-          <Board
-            size={room?.size}
-            players={players}
-            cardsInBoard={cardsInBoard}
-            anchorEl={anchorEl}
-            setAnchorEl={setAnchorEl}
-            onSelected={(x, y, e) => {
-              const heroSelect = heroes.find(
-                (_cell) => _cell.x === x && _cell.y === y
-              );
-              if (heroSelect) {
-                setHeroSelected(heroSelect);
-                setAnchorEl(e.currentTarget);
-              } else if (heroSelected?.id) {
-                setHeroSelected({ ...heroSelected, x, y, status: 2 });
-              }
-            }}
-          />
-        </Grid>
-        <Grid item>
+          <br />
+
           <Button
             size="large"
             variant="outlined"
             style={{
-              backgroundImage:
-                "url(https://img.elo7.com.br/product/zoom/2A58C4E/papel-de-parede-carta-baralho-poquer-jogo-cartas-barbearia-papel-de-parede.jpg)",
               border: "1px solid #CCC",
-              width: 241 / 3,
-              height: 392 / 3,
             }}
-            onClick={() => setShowCards({ open: true })}
+            onClick={() => setRoomDB({ turn: (turn || 0) + 1 })}
           >
-            Minha mão
+            {turns[(turn || 0) + 1]}
           </Button>
+
         </Grid>
         <Grid item>
           <Button
@@ -189,28 +150,51 @@ function Game1Play({ currentUser }: Props) {
             // disabled={cardsInDeck.length === 0}
             style={{
               border: "1px solid #CCC",
-              width: 241 / 3,
-              height: 392 / 3,
             }}
             onClick={() => setShowPlayers({ open: true })}
           >
             Players
           </Button>
         </Grid>
-        <Grid item>
-          <Button
-            size="large"
-            variant="outlined"
-            // disabled={cardsInDeck.length === 0}
-            style={{
-              border: "1px solid #CCC",
-              width: 241 / 3,
-              height: 392 / 3,
+        <Grid item xs={12} >
+          <Board
+            room={room}
+            players={players}
+            heroSelected={heroSelected}
+            cardsInBoard={cardsInBoard}
+            onSelected={(x, y, e) => {
+              const heroClicked = heroes.find(
+                (_cell) => _cell.x === x && _cell.y === y
+              );
+
+              if (heroSelected) {
+                if (heroClicked) {
+                  api.addOrUpdateRoom({ ...room, battle: { heroAtk: heroSelected, heroDef: heroClicked } })
+                } else {
+                  api.addOrUpdateRoom({
+                    id: room?.id,
+                    heroes: heroes.map((_a, idx) => {
+                      if (_a.id === heroSelected?.id) {
+                        return {
+                          ..._a,
+                          x: x || -1,
+                          y: y || -1,
+                          status: 2,
+                        };
+                      }
+                      return _a;
+                    }),
+                  });
+                  setHeroSelected(undefined)
+                }
+              } else {
+                if (heroClicked) {
+                  setHeroSelected(heroClicked);
+                }
+              }
+
             }}
-            onClick={() => setRoomDB({ turn: (turn || 0) + 1 })}
-          >
-            {turns[(turn || 0) + 1]}
-          </Button>
+          />
         </Grid>
       </Grid>
 
@@ -238,18 +222,50 @@ function Game1Play({ currentUser }: Props) {
         heroes={heroes}
       />
 
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
+      <Zoom in
+        style={{
+          transitionDelay: `${700}ms`,
         }}
+        unmountOnExit
       >
-        <MenuItem onClick={() => setAnchorEl(null)}>Andar</MenuItem>
-        <MenuItem onClick={() => setAnchorEl(null)}>Atacar</MenuItem>
-      </Menu>
+        <Fab
+          size="large"
+          variant="extended"
+          style={{
+            backgroundImage:
+              "url(https://img.elo7.com.br/product/zoom/2A58C4E/papel-de-parede-carta-baralho-poquer-jogo-cartas-barbearia-papel-de-parede.jpg)",
+            color: "white",
+            position: "fixed",
+            bottom: 16,
+            right: 16
+          }}
+          onClick={() => setShowCards({ open: true })}
+        >
+          Minha mão
+        </Fab>
+      </Zoom>
+
+      {room?.battle?.heroAtk &&
+        <BattleModal
+          room={room}
+          updateHero={(newHero) => {
+            setHeroSelected(undefined)
+            api.addOrUpdateRoom({
+              id: room?.id,
+              battle: {},
+              heroes: heroes.map((_a, idx) => {
+                if (_a.id === newHero?.id) {
+                  return {
+                    ..._a,
+                    ...newHero
+                  };
+                }
+                return _a;
+              }),
+            });
+          }}
+        />
+      }
     </>
   );
 }

@@ -13,7 +13,7 @@ import "firebase/compat/storage";
 import "firebase/compat/firestore";
 import { firebaseConfig } from "./firebaseConfig";
 import { IHero, IUser, IRoom, IDeckItem } from "./types";
-import { IPlayer } from "./pages/game1/GamePlay";
+import { IPlayer } from "./pages/game/GamePlay";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const app = firebase.initializeApp(firebaseConfig);
@@ -167,7 +167,6 @@ export default {
     const documentSnapshots = await getDocs(q);
 
     return documentSnapshots.docs.map((doc) => {
-      debugger;
       return {
         id: doc.id,
         ...doc.data(),
@@ -179,7 +178,6 @@ export default {
     heroes: IDeckItem[],
     player: IPlayer
   ) => {
-    debugger;
     const roomRef = db.collection("rooms").doc(roomId);
     const result = await db.runTransaction((transaction) => {
       return transaction.get(roomRef).then((doc) => {

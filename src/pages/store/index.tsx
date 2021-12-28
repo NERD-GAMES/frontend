@@ -6,6 +6,7 @@ import Title from "../../components/Title";
 import { IHero, IUser } from "../../types";
 import BuyHeroModal from "./buyHeroModal";
 import PaidIcon from '@mui/icons-material/Paid';
+import Menu from "../../components/Menu";
 
 interface IModal {
   open: boolean
@@ -50,6 +51,8 @@ const Heroes = () => {
             )
           })}
         </Grid>
+
+        <Menu />
       </Container>
 
 

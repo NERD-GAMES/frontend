@@ -69,6 +69,13 @@ const ResponsiveAppBar = ({ currentUser, setLogoffAction }: Props) => {
               open={Boolean(anchorElUser)}
               onClose={() => setAnchorElUser(null)}
             >
+              <MenuItem component={Link} to="/admin"
+                onClick={() => {
+                  setAnchorElUser(null)
+                }}
+              >
+                <Typography textAlign="center">Admin</Typography>
+              </MenuItem>
               <MenuItem onClick={() => {
                 setLogoffAction()
                 setAnchorElUser(null)

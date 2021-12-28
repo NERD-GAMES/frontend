@@ -1,4 +1,4 @@
-import { IPlayer } from "./pages/game1/GamePlay";
+import { IPlayer } from "./pages/game/GamePlay";
 
 export interface IRoom {
   id?: string
@@ -6,6 +6,10 @@ export interface IRoom {
   type?: string
   status?: "wait" | "in-prograss" | "done"
   size?: string
+  battle? : {
+    heroAtk?: IHero
+    heroDef?: IHero
+  }
   players?: IPlayer[]
   heroes?: IDeckItem[]
   currentPlayerId?: string

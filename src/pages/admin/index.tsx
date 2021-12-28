@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Fab, Grid, Icon, IconButton } from "@mui/material";
 import api from "../../api";
 import CardHero from "../../components/CardHero";
+import Menu from "../../components/Menu";
 import Title from "../../components/Title";
 import { IHero, IUser } from "../../types";
 import AddOrEditHeroModal from "./addOrEditHeroModal";
@@ -45,6 +46,7 @@ const Heroes = () => {
             )
           })}
         </Grid>
+        <Menu />
       </Container>
 
 

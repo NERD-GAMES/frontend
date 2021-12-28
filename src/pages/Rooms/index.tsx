@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Grid, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { IDeckItem, IRoom, IUser } from "./../../types";
+import { IDeckItem, IRoom, IUser } from "../../types";
 import api from "../../api";
 import AddOrEditRoomModal from "./components/addOrEditRoomModal";
 import { connect } from "react-redux";
 import { RootState } from "../../store";
+import Menu from "../../components/Menu";
 
 interface IModal {
   open: boolean;
@@ -109,6 +110,9 @@ const Rooms = ({ currentUser }: Props) => {
           }}
         />
       )}
+
+
+      <Menu />
     </Container>
   );
 };

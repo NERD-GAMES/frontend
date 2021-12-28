@@ -17,6 +17,7 @@ import BuyHeroModal from "./buyHeroModal";
 import PaidIcon from "@mui/icons-material/Paid";
 import { connect } from "react-redux";
 import { RootState } from "../../store";
+import Menu from "../../components/Menu";
 
 interface IModal {
   open: boolean;
@@ -62,6 +63,7 @@ const Heroes = ({ currentUser }: Props) => {
             );
           })}
         </Grid>
+        <Menu />
       </Container>
 
       {modal.open && (

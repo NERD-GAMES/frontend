@@ -13,7 +13,6 @@ const setLogin = (state = INITIAL_STATE, action: any) => {
 }
 
 const setLogOff = (state = INITIAL_STATE, action: any) => {
-  debugger
   return INITIAL_STATE;
 }
 

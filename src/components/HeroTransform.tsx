@@ -4,15 +4,16 @@ import "animate.css";
 
 interface Props {
   hero: IHero;
+  size: string;
 }
 
-const HeroTransform = ({ hero }: Props) => {
+const HeroTransform = ({ hero, size }: Props) => {
   return (
     <div
       style={{
         position: "relative",
-        height: "100%",
-        width: "100%",
+        height: size,
+        width: size,
       }}
     >
       {hero?.parts?.map((partHero) => {

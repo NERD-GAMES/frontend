@@ -25,8 +25,9 @@ const HandDrawer = ({
   return (
     <Drawer
       anchor="bottom"
+      variant="temporary"
       PaperProps={{
-        style: { backgroundColor: "#FFF5" },
+        style: { backgroundColor: "#FFFD" },
       }}
       open={showCards.open}
       onClose={() => setShowCards({ open: false })}

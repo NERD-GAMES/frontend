@@ -10,7 +10,7 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import api from "./../../../api";
+import api from "../../../api";
 import Title from "../../../components/Title";
 import { IDeckItem, IRoom, IUser } from "../../../types";
 import { connect } from "react-redux";
@@ -76,7 +76,7 @@ const AddOrEditHeroModal = ({ onHide, data, currentUser }: Props) => {
       }),
       players: [player],
     })) as IRoom;
-    nav("/game/" + newRoom.id);
+    nav("/" + newRoom.id);
     onHide(true);
   };
 
