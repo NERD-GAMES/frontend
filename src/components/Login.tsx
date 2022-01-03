@@ -6,6 +6,7 @@ import { Button, Grid } from "@mui/material";
 import Api from "../api";
 import { Creators as userActions } from "./../store/ducks/currentUser";
 import { RootState } from "../store";
+import { useBlockchain } from "./../blockchain";
 
 interface Props {
   setLoginAction: any;
@@ -13,9 +14,19 @@ interface Props {
 }
 
 function Login({ setLoginAction, setLogoffAction }: Props) {
+  const {
+    isLoged,
+    account,
+    balance,
+    myTokens,
+    getMyTokensFromBlockchain,
+    doLogin,
+    doMint,
+  }: any = useBlockchain()
+
   useEffect(() => {
     setLogoffAction();
-    return () => {};
+    return () => { };
   }, []);
 
   const handleFacebookLogin = async () => {
@@ -58,6 +69,19 @@ function Login({ setLoginAction, setLogoffAction }: Props) {
         >
           Entrar Com Google
         </Button>
+      </Grid>
+      <Grid item>
+        {!isLoged ?
+          <Button
+            style={{ width: 300 }}
+            variant="outlined"
+            onClick={doLogin}
+          >
+            Entrar Na Blockchain
+          </Button>
+          :
+          <div>Você ja esta logado na blockchain</div>
+        }
       </Grid>
     </Grid>
   );

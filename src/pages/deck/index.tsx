@@ -18,6 +18,7 @@ import PaidIcon from "@mui/icons-material/Paid";
 import { connect } from "react-redux";
 import { RootState } from "../../store";
 import Menu from "../../components/Menu";
+import { useBlockchain } from "../../blockchain";
 
 interface IModal {
   open: boolean;
@@ -29,8 +30,20 @@ interface Props {
 }
 
 const Heroes = ({ currentUser }: Props) => {
+  const {
+    isLoged,
+    account,
+    balance,
+    myTokens,
+    getMyTokensFromBlockchain,
+    doLogin,
+    doMint,
+  }: any = useBlockchain()
+
   const [modal, setModal] = useState<IModal>({ open: false });
   const [heroes, setHeroes] = useState<IHero[]>([]);
+
+
 
   const loadHeroes = () => {
     if (currentUser?.id) {
@@ -50,8 +63,14 @@ const Heroes = ({ currentUser }: Props) => {
     <>
       <Container>
         <Title title="Meus Heróis" />
-
         <Grid container spacing={2} alignItems="center" justifyContent="center">
+          <Grid item xs={12}>
+            {myTokens?.map((tk: string) => {
+              return (
+                <h3>{tk}</h3>
+              )
+            })}
+          </Grid>
           {heroes.map((h) => {
             return (
               <Grid item>

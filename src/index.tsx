@@ -7,13 +7,17 @@ import { HashRouter } from "react-router-dom";
 import { Provider } from "react-redux"
 import { store, persistor } from "./store"
 import { PersistGate } from 'redux-persist/integration/react'
+import { BlockchainProvider } from "./blockchain"
+
 
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <App />
+          <BlockchainProvider>
+            <App />
+          </BlockchainProvider>
         </PersistGate>
       </Provider>
     </HashRouter>

@@ -10,6 +10,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import PaidIcon from '@mui/icons-material/Paid';
 import { RootState } from "../../store";
 import { connect } from "react-redux";
+import { useBlockchain } from "../../blockchain";
 
 interface Props {
   currentUser?: IUser
@@ -18,9 +19,40 @@ interface Props {
 }
 
 const BuyHeroModal = ({ onHide, data, currentUser }: Props) => {
+  const {
+    isLoged,
+    account,
+    balance,
+    myTokens,
+    getMyTokensFromBlockchain,
+    doLogin,
+    doMint,
+  }: any = useBlockchain()
   const [hero, setHero] = useState(cloneDeep({ ...data, userId: currentUser?.id }))
 
+  const onRegistered = () => {
+
+  }
+
+  const onReceipt = () => {
+    
+  }
+
+  const onError = () => {
+
+  }
+
+  const onConfirmation = () => {
+
+  }
+
   const onBuy = async () => {
+    await doMint(hero.id, {
+      onRegistered,
+      onReceipt,
+      onError,
+      onConfirmation,
+    })
     await api.addOrUpdateHero(hero)
     onHide(true)
   }
